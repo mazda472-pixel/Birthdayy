@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#EC4899">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Дни рождения">
+    <title>🎂 Дни рождения</title>
+
+    <!-- Встроенная SVG-иконка приложения для рабочего стола Android / iOS -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23FF69B4'/%3E%3Cstop offset='100%25' stop-color='%23DB2777'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='128' height='128' rx='32' fill='url(%23g)'/%3E%3Ctext x='64' y='84' font-size='64' text-anchor='middle'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23FF69B4'/%3E%3Cstop offset='100%25' stop-color='%23DB2777'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='128' height='128' rx='32' fill='url(%23g)'/%3E%3Ctext x='64' y='84' font-size='64' text-anchor='middle'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E">
+
+    <!-- Полностью автономные стили без внешних CDN (работает на 100% без интернета и в APK) -->
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --rose-bg: #FFF0F5;
+            --rose-soft: #FFE4E9;
+            --rose-100: #FCE7F3;
+            --rose-200: #FBCFE8;
+            --rose-300: #F9A8D4;
+            --rose-400: #F472B6;
+            --rose-500: #EC4899;
+            --rose-600: #DB2777;
+            --rose-700: #BE185D;
+            --rose-800: #9D174D;
+            --rose-900: #831843;
+            --rose-950: #4A2535;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE4EC 50%, #FCE7F3 100%);
+            min-height: 100vh;
+            color: var(--rose-950);
+            line-height: 1.5;
+            padding-bottom: 4.5rem;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background-color: var(--rose-200);
+            color: var(--rose-900);
+        }
+
+        button, input, select {
+            font-family: inherit;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        /* Главный контейнер */
+        .app-container {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 0;
+        }
+
+        @media (min-width: 640px) {
+            .app-container {
+                padding: 2.25rem 1.5rem 0;
+            }
+        }
+
+        /* Шапка */
+        .app-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .app-header {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .top-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.85rem;
+            border-radius: 9999px;
+            background: rgba(252, 231, 243, 0.92);
+            border: 1px solid var(--rose-200);
+            color: var(--rose-700);
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-title {
+            font-size: 1.875rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: var(--rose-950);
+            line-height: 1.2;
+        }
+
+        @media (min-width: 640px) {
+            .app-title {
+                font-size: 2.25rem;
+            }
+        }
+
+        .current-date-label {
+            color: rgba(157, 23, 77, 0.78);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.625rem;
+        }
+
+        /* Кнопки */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.1rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, var(--rose-500), #F43F5E);
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 0.875rem;
+            border: none;
+            box-shadow: 0 6px 16px -3px rgba(236, 72, 153, 0.45);
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.05);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0.65rem 0.95rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.88);
+            color: var(--rose-700);
+            border: 1px solid var(--rose-200);
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-shadow: 0 2px 6px rgba(244, 114, 182, 0.1);
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.15s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #FFFFFF;
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-label-desktop {
+            display: none;
+        }
+
+        @media (min-width: 640px) {
+            .btn-label-desktop {
+                display: inline;
+            }
+        }
+
+        /* Карточки с мягкой розовой тенью */
+        .pink-card {
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 8px 24px -4px rgba(244, 114, 182, 0.15), 0 2px 6px -1px rgba(244, 114, 182, 0.08);
+            border: 1px solid rgba(251, 207, 232, 0.85);
+            border-radius: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .person-card {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .person-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px -6px rgba(236, 72, 153, 0.22), 0 4px 10px -2px rgba(236, 72, 153, 0.12);
+            border-color: var(--rose-400);
+        }
+
+        @keyframes softPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.42); }
+            50% { box-shadow: 0 0 0 8px rgba(236, 72, 153, 0); }
+        }
+
+        .today-glow {
+            animation: softPulse 2.5s infinite;
+            border: 2px solid var(--rose-500) !important;
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFF5F8 100%);
+        }
+
+        /* Баннер ближайшего дня рождения */
+        .upcoming-banner {
+            margin-bottom: 1.75rem;
+            border-radius: 1.75rem;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, #EC4899 0%, #FB7185 55%, #F472B6 100%);
+            color: #FFFFFF;
+            box-shadow: 0 12px 28px -6px rgba(236, 72, 153, 0.42);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-decor-1 {
+            position: absolute;
+            right: -2rem;
+            top: -2.5rem;
+            width: 9rem;
+            height: 9rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.16);
+            pointer-events: none;
+        }
+
+        .banner-decor-2 {
+            position: absolute;
+            right: 5rem;
+            bottom: -3rem;
+            width: 7rem;
+            height: 7rem;
+            border-radius: 9999px;
+            background: rgba(251, 207, 232, 0.22);
+            pointer-events: none;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .banner-content {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .banner-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .banner-icon {
+            width: 3.25rem;
+            height: 3.25rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.65rem;
+            flex-shrink: 0;
+        }
+
+        .banner-subtitle {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 800;
+            color: #FCE7F3;
+            margin-bottom: 0.15rem;
+        }
+
+        .banner-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .banner-details {
+            font-size: 0.875rem;
+            color: rgba(255, 241, 242, 0.94);
+            margin-top: 0.2rem;
+        }
+
+        .banner-badge {
+            align-self: flex-start;
+            padding: 0.55rem 1rem;
+            border-radius: 1rem;
+            background: #FFFFFF;
+            color: var(--rose-600);
+            font-weight: 800;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(131, 24, 67, 0.14);
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 640px) {
+            .banner-badge {
+                align-self: center;
+            }
+        }
+
+        /* Панель поиска и фильтров */
+        .filter-panel {
+            padding: 1.15rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .filter-top-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 1024px) {
+            .filter-top-row {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.15rem;
+            height: 1.15rem;
+            color: var(--rose-400);
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 2.25rem 0.65rem 2.6rem;
+            border-radius: 1rem;
+            background: rgba(253, 242, 248, 0.85);
+            border: 1px solid var(--rose-200);
+            color: var(--rose-950);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .search-input::placeholder {
+            color: var(--rose-400);
+        }
+
+        .search-input:focus {
+            border-color: var(--rose-400);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(251, 207, 232, 0.65);
+        }
+
+        .clear-search-btn {
+            position: absolute;
+            right: 0.65rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--rose-400);
+            font-size: 0.95rem;
+            padding: 0.25rem 0.4rem;
+            cursor: pointer;
+        }
+
+        .selects-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+
+        .select-group {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex: 1 1 auto;
+        }
+
+        .select-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--rose-700);
+            white-space: nowrap;
+        }
+
+        .styled-select {
+            width: 100%;
+            padding: 0.62rem 0.85rem;
+            border-radius: 1rem;
+            background: rgba(253, 242, 248, 0.85);
+            border: 1px solid var(--rose-200);
+            color: var(--rose-900);
+            font-size: 0.85rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .styled-select:focus {
+            border-color: var(--rose-400);
+            background: #FFFFFF;
+        }
+
+        /* Горизонтальный скролл месяцев */
+        .month-pills {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .month-pills::-webkit-scrollbar {
+            display: none;
+        }
+
+        .month-pill-active {
+            padding: 0.45rem 0.9rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, var(--rose-500), #F43F5E);
+            color: #FFFFFF;
+            border: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            box-shadow: 0 4px 10px -2px rgba(236, 72, 153, 0.4);
+        }
+
+        .month-pill-inactive {
+            padding: 0.45rem 0.85rem;
+            border-radius: 1rem;
+            background: rgba(253, 242, 248, 0.9);
+            color: var(--rose-800);
+            border: 1px solid rgba(251, 207, 232, 0.9);
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .month-pill-inactive:hover {
+            background: var(--rose-100);
+        }
+
+        /* Сетка карточек */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.25rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Элементы внутри карточки участника */
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .card-identity {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0;
+        }
+
+        .avatar-circle {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 1rem;
+            color: #FFFFFF;
+            font-weight: 800;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(236, 72, 153, 0.22);
+        }
+
+        .grad-0 { background: linear-gradient(135deg, #F472B6, #F43F5E); }
+        .grad-1 { background: linear-gradient(135deg, #E879F9, #EC4899); }
+        .grad-2 { background: linear-gradient(135deg, #FB7185, #FB923C); }
+        .grad-3 { background: linear-gradient(135deg, #EC4899, #A855F7); }
+        .grad-4 { background: linear-gradient(135deg, #FDA4AF, #EC4899); }
+        .grad-5 { background: linear-gradient(135deg, #F472B6, #F87171); }
+
+        .person-info {
+            min-width: 0;
+        }
+
+        .person-name {
+            font-weight: 700;
+            color: var(--rose-950);
+            font-size: 1.02rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .person-nick {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--rose-500);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-shrink: 0;
+        }
+
+        .icon-btn {
+            width: 2.1rem;
+            height: 2.1rem;
+            border-radius: 0.75rem;
+            border: none;
+            background: #FDF2F8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .icon-btn:hover {
+            background: var(--rose-100);
+        }
+
+        .icon-btn:active {
+            transform: scale(0.92);
+        }
+
+        .card-badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+        }
+
+        .date-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.9rem;
+            background: #FDF2F8;
+            border: 1px solid var(--rose-100);
+            color: var(--rose-900);
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .zodiac-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.9rem;
+            background: linear-gradient(135deg, #FCE7F3, #FFE4E6);
+            border: 1px solid rgba(251, 207, 232, 0.95);
+            color: var(--rose-800);
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: filter 0.15s ease, transform 0.1s ease;
+        }
+
+        .zodiac-chip:hover {
+            filter: brightness(0.97);
+        }
+
+        .zodiac-chip:active {
+            transform: scale(0.95);
+        }
+
+        .card-footer {
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(252, 231, 243, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-index {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--rose-400);
+        }
+
+        .countdown-badge {
+            padding: 0.28rem 0.65rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-empty {
+            background: #F3F4F6;
+            color: #6B7280;
+        }
+
+        .badge-today {
+            background: linear-gradient(135deg, var(--rose-500), #F43F5E);
+            color: #FFFFFF;
+        }
+
+        .badge-soon {
+            background: var(--rose-100);
+            color: var(--rose-700);
+            border: 1px solid var(--rose-300);
+        }
+
+        .badge-normal {
+            background: #FDF2F8;
+            color: var(--rose-600);
+        }
+
+        /* Пустой экран поиска */
+        .empty-state {
+            text-align: center;
+            padding: 3.5rem 1.25rem;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .empty-title {
+            font-size: 1.125rem;
+            font-weight: 800;
+            color: var(--rose-950);
+        }
+
+        .empty-text {
+            font-size: 0.875rem;
+            color: rgba(157, 23, 77, 0.8);
+            margin: 0.35rem auto 1rem;
+            max-width: 24rem;
+        }
+
+        /* Подвал */
+        .app-footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(190, 24, 93, 0.65);
+        }
+
+        /* Модальные окна */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(74, 37, 53, 0.42);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-box {
+            background: #FFFFFF;
+            border-radius: 1.75rem;
+            width: 100%;
+            max-width: 26rem;
+            padding: 1.5rem;
+            box-shadow: 0 24px 48px -12px rgba(131, 24, 67, 0.28);
+            border: 1px solid var(--rose-100);
+            position: relative;
+        }
+
+        .modal-box-sm {
+            max-width: 22rem;
+            text-align: center;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            width: 2.1rem;
+            height: 2.1rem;
+            border-radius: 9999px;
+            border: none;
+            background: #FDF2F8;
+            color: var(--rose-600);
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--rose-100);
+        }
+
+        .zodiac-hero-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1.25rem;
+            background: linear-gradient(135deg, var(--rose-400), #F43F5E);
+            color: #FFFFFF;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            box-shadow: 0 8px 20px -4px rgba(236, 72, 153, 0.4);
+        }
+
+        .zodiac-person-pill {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            background: #FDF2F8;
+            border: 1px solid var(--rose-200);
+            color: var(--rose-700);
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .zodiac-desc-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 1.15rem;
+            background: #FDF2F8;
+            border: 1px solid var(--rose-100);
+            font-size: 0.875rem;
+            color: var(--rose-900);
+            line-height: 1.55;
+        }
+
+        /* Формы в модалке */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--rose-800);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.65rem 0.95rem;
+            border-radius: 0.95rem;
+            background: #FDF2F8;
+            border: 1px solid var(--rose-200);
+            color: var(--rose-950);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--rose-400);
+            background: #FFFFFF;
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.65rem;
+        }
+
+        .form-hint {
+            font-size: 0.72rem;
+            color: rgba(190, 24, 93, 0.75);
+            margin-top: 0.3rem;
+        }
+
+        .modal-footer-btns {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.65rem;
+            margin-top: 1.25rem;
+        }
+
+        /* Toast уведомление */
+        .toast-popup {
+            position: fixed;
+            bottom: 1.25rem;
+            right: 1.25rem;
+            z-index: 60;
+            background: var(--rose-900);
+            color: #FFFFFF;
+            padding: 0.75rem 1.1rem;
+            border-radius: 1rem;
+            box-shadow: 0 12px 24px rgba(74, 37, 53, 0.3);
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transform: translateY(5rem);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        .toast-popup.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- Шапка -->
+        <header class="app-header">
+            <div>
+                <div class="top-pill">
+                    <span>🌸 Автономный справочник</span>
+                    <span>•</span>
+                    <span id="totalCountBadge">37 человек</span>
+                </div>
+                <h1 class="app-title">🎂 Дни рождения</h1>
+                <p class="current-date-label" id="currentDateLabel">Загрузка даты...</p>
+            </div>
+
+            <div class="header-actions">
+                <button type="button" onclick="openModal()" class="btn-primary">
+                    <span>➕</span>
+                    <span>Добавить</span>
+                </button>
+
+                <button type="button" onclick="askResetList()" title="Вернуть исходный список из Excel" class="btn-secondary">
+                    <span>🔄</span>
+                    <span class="btn-label-desktop">Сбросить список</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Баннер ближайшего дня рождения -->
+        <section id="upcomingBanner" class="upcoming-banner">
+            <div class="banner-decor-1"></div>
+            <div class="banner-decor-2"></div>
+            
+            <div class="banner-content">
+                <div class="banner-left">
+                    <div class="banner-icon">🎁</div>
+                    <div>
+                        <div class="banner-subtitle" id="upcomingSubtitle">Ближайший день рождения</div>
+                        <h2 class="banner-title" id="upcomingTitle">Вычисляем...</h2>
+                        <p class="banner-details" id="upcomingDetails"></p>
+                    </div>
+                </div>
+                <div id="upcomingCountdownBadge" class="banner-badge">Скоро!</div>
+            </div>
+        </section>
+
+        <!-- Панель поиска, сортировки и фильтров -->
+        <section class="pink-card filter-panel">
+            <div class="filter-top-row">
+                <div class="search-wrap">
+                    <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Поиск по имени, нику или знаку..." 
+                        class="search-input"
+                    >
+                    <button type="button" id="clearSearchBtn" onclick="clearSearch()" class="clear-search-btn hidden">✕</button>
+                </div>
+
+                <div class="selects-row">
+                    <div class="select-group">
+                        <label for="zodiacFilterSelect" class="select-label">Знак:</label>
+                        <select id="zodiacFilterSelect" onchange="onZodiacFilterChange()" class="styled-select">
+                            <option value="all">🔮 Все знаки</option>
+                        </select>
+                    </div>
+
+                    <div class="select-group">
+                        <label for="sortSelect" class="select-label">Сортировка:</label>
+                        <select id="sortSelect" onchange="renderPeople()" class="styled-select">
+                            <option value="upcoming">✨ Ближайшие по дате</option>
+                            <option value="calendar">📅 По календарю (Янв → Дек)</option>
+                            <option value="zodiac">♈ По знаку зодиака</option>
+                            <option value="default">📋 Как в таблице (1 → 37)</option>
+                            <option value="name">🔤 По имени (А → Я)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Фильтр по месяцам -->
+            <div class="month-pills" id="monthFilters"></div>
+        </section>
+
+        <!-- Сетка карточек участников -->
+        <main>
+            <div id="cardsGrid" class="cards-grid"></div>
+
+            <div id="emptyState" class="hidden empty-state pink-card">
+                <div class="empty-icon">🌷</div>
+                <h3 class="empty-title">Никого не найдено</h3>
+                <p class="empty-text">Попробуйте изменить поисковый запрос, знак зодиака или выбрать другой месяц.</p>
+                <button type="button" onclick="resetFilters()" class="btn-secondary">
+                    Показать всех участников
+                </button>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            Автономное приложение • Работает без интернета • Данные сохраняются на устройстве
+        </footer>
+    </div>
+
+    <!-- Модальное окно: Краткий гороскоп участника -->
+    <div id="zodiacModal" class="modal-backdrop hidden">
+        <div class="modal-box modal-box-sm">
+            <button type="button" onclick="closeZodiacModal()" class="modal-close-btn">✕</button>
+            <div id="zodiacModalSymbol" class="zodiac-hero-icon">✨</div>
+            <div class="zodiac-person-pill" id="zodiacModalPerson">Имя</div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--rose-950);" id="zodiacModalTitle">Знак зодиака</h3>
+            <p style="font-size: 0.78rem; font-weight: 600; color: var(--rose-500); margin-top: 0.15rem;" id="zodiacModalDates">Период</p>
+            <div class="zodiac-desc-box" id="zodiacModalDesc">Описание характера...</div>
+            <button type="button" onclick="closeZodiacModal()" class="btn-primary" style="width: 100%; margin-top: 1.15rem;">
+                Понятно ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно: Добавление / Редактирование участника -->
+    <div id="personModal" class="modal-backdrop hidden">
+        <div class="modal-box">
+            <button type="button" onclick="closeModal()" class="modal-close-btn">✕</button>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--rose-950); margin-bottom: 1.15rem;" id="modalTitle">Добавить участника</h3>
+
+            <form id="personForm" onsubmit="savePerson(event)">
+                <input type="hidden" id="editId">
+                
+                <div class="form-group">
+                    <label class="form-label">Имя *</label>
+                    <input type="text" id="inputName" required placeholder="Например: Оксана" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ник в игре / чате *</label>
+                    <input type="text" id="inputNick" required placeholder="Например: DoGoNia" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Дата дня рождения</label>
+                    <div class="form-grid-2">
+                        <select id="inputDay" class="form-input">
+                            <option value="">День (нет)</option>
+                        </select>
+                        <select id="inputMonth" class="form-input">
+                            <option value="">Месяц (нет)</option>
+                            <option value="1">Января</option>
+                            <option value="2">Февраля</option>
+                            <option value="3">Марта</option>
+                            <option value="4">Апреля</option>
+                            <option value="5">Мая</option>
+                            <option value="6">Июня</option>
+                            <option value="7">Июля</option>
+                            <option value="8">Августа</option>
+                            <option value="9">Сентября</option>
+                            <option value="10">Октября</option>
+                            <option value="11">Ноября</option>
+                            <option value="12">Декабря</option>
+                        </select>
+                    </div>
+                    <p class="form-hint">Оставьте пустым, если дата рождения пока неизвестна.</p>
+                </div>
+
+                <div class="modal-footer-btns">
+                    <button type="button" onclick="closeModal()" class="btn-secondary">Отмена</button>
+                    <button type="submit" class="btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Кастомное окно подтверждения -->
+    <div id="confirmModal" class="modal-backdrop hidden">
+        <div class="modal-box modal-box-sm">
+            <div style="width: 3rem; height: 3rem; border-radius: 1rem; background: var(--rose-100); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 0.75rem;" id="confirmIcon">
+                🌸
+            </div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--rose-950);" id="confirmTitle">Подтвердите действие</h3>
+            <p style="font-size: 0.875rem; color: rgba(157, 23, 77, 0.85); margin-top: 0.35rem;" id="confirmText">Вы уверены?</p>
+            <div style="display: flex; gap: 0.65rem; margin-top: 1.25rem;">
+                <button type="button" onclick="closeConfirm()" class="btn-secondary" style="flex: 1;">Отмена</button>
+                <button type="button" id="confirmActionBtn" class="btn-primary" style="flex: 1;">Подтвердить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Всплывающее уведомление -->
+    <div id="toast" class="toast-popup">
+        <span>✨</span>
+        <span id="toastMessage">Сохранено</span>
+    </div>
+
+    <script>
+        // Автоматическая регистрация PWA-манифеста и Service Worker для установки на Android как приложение
+        (function setupPWA() {
+            try {
+                const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF69B4"/><stop offset="100%" stop-color="#DB2777"/></linearGradient></defs><rect width="512" height="512" rx="120" fill="url(#g)"/><text x="256" y="330" font-size="250" text-anchor="middle">🎂</text></svg>`;
+                const iconUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(iconSvg);
+
+                const manifest = {
+                    name: "Дни рождения и Гороскоп",
+                    short_name: "Дни рождения",
+                    description: "Календарь дней рождения участников с автоматическим расчётом гороскопа",
+                    start_url: "./",
+                    display: "standalone",
+                    background_color: "#FFF0F5",
+                    theme_color: "#EC4899",
+                    orientation: "portrait",
+                    icons: [
+                        { src: iconUrl, sizes: "192x192", type: "image/svg+xml" },
+                        { src: iconUrl, sizes: "512x512", type: "image/svg+xml" }
+                    ]
+                };
+
+                const manifestBlob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
+                const manifestLink = document.createElement("link");
+                manifestLink.rel = "manifest";
+                manifestLink.href = URL.createObjectURL(manifestBlob);
+                document.head.appendChild(manifestLink);
+            } catch (e) {
+                console.warn("PWA manifest init skipped:", e);
+            }
+        })();
+
+        /**
+         * Исходные данные из файла "Лист Microsoft Excel (5).xlsx" (все 37 участников)
+         */
+        const INITIAL_PEOPLE = [
+            { id: 1, nick: "DoGoNia", name: "Оксана", day: 22, month: 2 },
+            { id: 2, nick: "Клаудио", name: "CXTV", day: 12, month: 3 },
+            { id: 3, nick: "Kiss88", name: "Юля", day: 18, month: 11 },
+            { id: 4, nick: "villivilli", name: "Виолетта", day: 16, month: 6 },
+            { id: 5, nick: "Блондин36", name: "Димас", day: 31, month: 8 },
+            { id: 6, nick: "Боевая Пума", name: "Натали", day: 5, month: 8 },
+            { id: 7, nick: "DeM1GoD", name: "Михайл", day: 1, month: 2 },
+            { id: 8, nick: "Sveta089", name: "Света", day: 11, month: 8 },
+            { id: 9, nick: "КИРАтист", name: "Жека", day: 7, month: 9 },
+            { id: 10, nick: "шурка005", name: "Александр", day: 3, month: 5 },
+            { id: 11, nick: "Маджестик", name: "Нина", day: 29, month: 3 },
+            { id: 12, nick: "Dreamm", name: "Наталья", day: 9, month: 5 },
+            { id: 13, nick: "КАТЮНЯ", name: "Катюня", day: 26, month: 12 },
+            { id: 14, nick: "DevillMaks", name: "Максимка", day: 24, month: 6 },
+            { id: 15, nick: "mazda472", name: "Айнур", day: 22, month: 9 },
+            { id: 16, nick: "Yung1", name: "Федя", day: 11, month: 2 },
+            { id: 17, nick: "ANKO", name: "Андрей", day: 23, month: 10 },
+            { id: 18, nick: "Peterretep", name: "Peterretep", day: 21, month: 3 },
+            { id: 19, nick: "Змей1992", name: "Сергей", day: 16, month: 5 },
+            { id: 20, nick: "EAGLE777", name: "Шамиль", day: 16, month: 7 },
+            { id: 21, nick: "DarkDay", name: "Сергей", day: 12, month: 3 },
+            { id: 22, nick: "strekozka92", name: "Аня", day: 22, month: 12 },
+            { id: 23, nick: "rush80", name: "Илария", day: 23, month: 4 },
+            { id: 24, nick: "ПивнойСлсочек", name: "Руслан", day: 24, month: 4 },
+            { id: 25, nick: "craizi", name: "Сергей", day: 3, month: 8 },
+            { id: 26, nick: "Angelov", name: "Сергей", day: 30, month: 3 },
+            { id: 27, nick: "Мышмут", name: "Кирилл", day: 17, month: 5 },
+            { id: 28, nick: "Ден4ик23", name: "Денис", day: 23, month: 8 },
+            { id: 29, nick: "Спартак", name: "Игорь", day: 3, month: 10 },
+            { id: 30, nick: "Lilu", name: "Ксения", day: 30, month: 7 },
+            { id: 31, nick: "DozzA", name: "Александр", day: 1, month: 1 },
+            { id: 32, nick: "Nesti Kep", name: "Настя", day: 15, month: 7 },
+            { id: 33, nick: "ТУРИСТ777", name: "Петр", day: 15, month: 9 },
+            { id: 34, nick: "Salta93", name: "Салтанат", day: 14, month: 10 },
+            { id: 35, nick: "Kamasutra", name: "Виктор", day: null, month: null },
+            { id: 36, nick: "еки", name: "Александр", day: 4, month: 6 },
+            { id: 37, nick: "Одриджейн", name: "Яна", day: 18, month: 5 }
+        ];
+
+        const STORAGE_KEY = 'pink_birthdays_list_v1';
+
+        const MONTHS_GENITIVE = [
+            "", "января", "февраля", "марта", "апреля", "мая", "июня",
+            "июля", "августа", "сентября", "октября", "ноября", "декабря"
+        ];
+
+        const MONTHS_NOMINATIVE = [
+            "Все месяцы", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+            "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+        ];
+
+        const ZODIAC_SIGNS = [
+            { id: 'aries', name: 'Овен', symbol: '♈', dates: '21 марта – 19 апреля', desc: 'Энергичный, смелый и целеустремлённый лидер, который заряжает окружающих своим энтузиазмом.' },
+            { id: 'taurus', name: 'Телец', symbol: '♉', dates: '20 апреля – 20 мая', desc: 'Надёжный, душевный и терпеливый друг с тонким вкусом и любовью к домашнему уюту.' },
+            { id: 'gemini', name: 'Близнецы', symbol: '♊', dates: '21 мая – 20 июня', desc: 'Общительный, остроумный и любознательный человек, с которым никогда не бывает скучно.' },
+            { id: 'cancer', name: 'Рак', symbol: '♋', dates: '21 июня – 22 июля', desc: 'Чуткий, заботливый и преданный близким человек с богатой интуицией и добрым сердцем.' },
+            { id: 'leo', name: 'Лев', symbol: '♌', dates: '23 июля – 22 августа', desc: 'Яркий, щедрый и харизматичный душа компании, умеющий дарить тепло и вдохновение.' },
+            { id: 'virgo', name: 'Дева', symbol: '♍', dates: '23 августа – 22 сентября', desc: 'Внимательный, мудрый и отзывчивый человек, который всегда поддержит делом и точным советом.' },
+            { id: 'libra', name: 'Весы', symbol: '♎', dates: '23 сентября – 22 октября', desc: 'Обаятельный, тактичный и гармоничный дипломат, приносящий в общение лёгкость и красоту.' },
+            { id: 'scorpio', name: 'Скорпион', symbol: '♏', dates: '23 октября – 21 ноября', desc: 'Страстный, проницательный и верный друг с сильным характером и магнетической харизмой.' },
+            { id: 'sagittarius', name: 'Стрелец', symbol: '♐', dates: '22 ноября – 21 декабря', desc: 'Жизнерадостный оптимист, искатель приключений и открытый человек с широкой душой.' },
+            { id: 'capricorn', name: 'Козерог', symbol: '♑', dates: '22 декабря – 19 января', desc: 'Целеустремлённый, стойкий и надёжный человек с отличным чувством юмора и верностью слову.' },
+            { id: 'aquarius', name: 'Водолей', symbol: '♒', dates: '20 января – 18 февраля', desc: 'Оригинальный, дружелюбный и свободолюбивый мечтатель с нестандартным взглядом на мир.' },
+            { id: 'pisces', name: 'Рыбы', symbol: '♓', dates: '19 февраля – 20 марта', desc: 'Творческий, чуткий и романтичный человек с богатым воображением и искренней добротой.' }
+        ];
+
+        let people = [];
+        let selectedMonth = 0;
+        let selectedZodiac = 'all';
+
+        function getZodiacSign(day, month) {
+            if (!day || !month) {
+                return {
+                    id: 'unknown',
+                    name: 'Не указан',
+                    symbol: '✨',
+                    label: 'Не указан ✨',
+                    dates: 'Дата рождения не заполнена',
+                    desc: 'Укажите день и месяц рождения в настройках карточки, чтобы узнать знак зодиака.'
+                };
+            }
+
+            let signId = 'capricorn';
+            if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) signId = 'aries';
+            else if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) signId = 'taurus';
+            else if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) signId = 'gemini';
+            else if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) signId = 'cancer';
+            else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) signId = 'leo';
+            else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) signId = 'virgo';
+            else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) signId = 'libra';
+            else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) signId = 'scorpio';
+            else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) signId = 'sagittarius';
+            else if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) signId = 'capricorn';
+            else if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) signId = 'aquarius';
+            else if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) signId = 'pisces';
+
+            const found = ZODIAC_SIGNS.find(z => z.id === signId);
+            return {
+                ...found,
+                label: `${found.symbol} ${found.name}`
+            };
+        }
+
+        function loadPeople() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        people = parsed;
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn("Не удалось прочитать localStorage:", e);
+            }
+            people = JSON.parse(JSON.stringify(INITIAL_PEOPLE));
+            saveToStorage();
+        }
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(people));
+            } catch (e) {
+                console.warn("Не удалось сохранить в localStorage:", e);
+            }
+        }
+
+        function getDaysUntilBirthday(day, month) {
+            if (!day || !month) return 9999;
+
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let nextBday = new Date(now.getFullYear(), month - 1, day);
+
+            if (nextBday < today) {
+                nextBday = new Date(now.getFullYear() + 1, month - 1, day);
+            }
+
+            const diffTime = nextBday.getTime() - today.getTime();
+            return Math.round(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        function formatDaysLeft(days) {
+            if (days === 0) return "Сегодня! 🎉";
+            if (days === 1) return "Завтра! ✨";
+            
+            const lastDigit = days % 10;
+            const lastTwoDigits = days % 100;
+            let word = "дней";
+            if (lastTwoDigits < 11 || lastTwoDigits > 19) {
+                if (lastDigit === 1) word = "день";
+                else if (lastDigit >= 2 && lastDigit <= 4) word = "дня";
+            }
+            return `Через ${days} ${word}`;
+        }
+
+        function formatBirthdayText(day, month) {
+            if (!day || !month) return "Дата не указана";
+            return `${day} ${MONTHS_GENITIVE[month]}`;
+        }
+
+        function getInitials(name, nick) {
+            const source = (name || nick || "?").trim();
+            const parts = source.split(/\s+/);
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+            return source.slice(0, 2).toUpperCase();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function initControls() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ru-RU', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            document.getElementById('currentDateLabel').textContent = 
+                "Сегодня: " + dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+
+            const daySelect = document.getElementById('inputDay');
+            for (let d = 1; d <= 31; d++) {
+                const opt = document.createElement('option');
+                opt.value = d;
+                opt.textContent = d;
+                daySelect.appendChild(opt);
+            }
+
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            searchInput.addEventListener('input', () => {
+                clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
+                renderPeople();
+            });
+
+            renderZodiacFilterOptions();
+            renderMonthPills();
+        }
+
+        function renderZodiacFilterOptions() {
+            const select = document.getElementById('zodiacFilterSelect');
+            const currentVal = selectedZodiac;
+            select.innerHTML = `<option value="all">🔮 Все знаки (${people.length})</option>`;
+
+            ZODIAC_SIGNS.forEach(sign => {
+                const count = people.filter(p => getZodiacSign(p.day, p.month).id === sign.id).length;
+                const opt = document.createElement('option');
+                opt.value = sign.id;
+                opt.textContent = `${sign.symbol} ${sign.name} (${count})`;
+                select.appendChild(opt);
+            });
+
+            const unknownCount = people.filter(p => !p.day || !p.month).length;
+            if (unknownCount > 0) {
+                const optUnknown = document.createElement('option');
+                optUnknown.value = 'unknown';
+                optUnknown.textContent = `✨ Не указан (${unknownCount})`;
+                select.appendChild(optUnknown);
+            }
+
+            select.value = currentVal;
+        }
+
+        function onZodiacFilterChange() {
+            selectedZodiac = document.getElementById('zodiacFilterSelect').value;
+            renderPeople();
+        }
+
+        function renderMonthPills() {
+            const container = document.getElementById('monthFilters');
+            container.innerHTML = '';
+
+            for (let m = 0; m <= 12; m++) {
+                const count = m === 0
+                    ? people.length
+                    : people.filter(p => p.month === m).length;
+
+                const isActive = selectedMonth === m;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => {
+                    selectedMonth = m;
+                    renderMonthPills();
+                    renderPeople();
+                };
+
+                btn.className = isActive ? 'month-pill-active' : 'month-pill-inactive';
+                btn.textContent = `${MONTHS_NOMINATIVE[m]} (${count})`;
+                container.appendChild(btn);
+            }
+        }
+
+        function updateUpcomingBanner() {
+            const badge = document.getElementById('totalCountBadge');
+            const count = people.length;
+            const lastDigit = count % 10;
+            const lastTwo = count % 100;
+            let word = 'человек';
+            if (lastTwo < 11 || lastTwo > 19) {
+                if (lastDigit >= 2 && lastDigit <= 4) word = 'человека';
+            }
+            badge.textContent = `${count} ${word}`;
+
+            const withDates = people
+                .filter(p => p.day && p.month)
+                .map(p => ({
+                    ...p,
+                    daysLeft: getDaysUntilBirthday(p.day, p.month),
+                    zodiac: getZodiacSign(p.day, p.month)
+                }))
+                .sort((a, b) => a.daysLeft - b.daysLeft);
+
+            const subtitleEl = document.getElementById('upcomingSubtitle');
+            const titleEl = document.getElementById('upcomingTitle');
+            const detailsEl = document.getElementById('upcomingDetails');
+            const countdownEl = document.getElementById('upcomingCountdownBadge');
+
+            if (withDates.length === 0) {
+                subtitleEl.textContent = 'Календарь';
+                titleEl.textContent = 'Нет указанных дат рождения';
+                detailsEl.textContent = 'Добавьте даты в карточки участников, чтобы видеть ближайшие праздники.';
+                countdownEl.textContent = '🎂';
+                return;
+            }
+
+            const minDays = withDates[0].daysLeft;
+            const nearest = withDates.filter(p => p.daysLeft === minDays);
+
+            if (minDays === 0) {
+                subtitleEl.textContent = '🎉 Сегодня день рождения!';
+                countdownEl.textContent = 'Сегодня! 🥳';
+            } else if (minDays === 1) {
+                subtitleEl.textContent = '✨ Уже завтра праздник!';
+                countdownEl.textContent = 'Завтра!';
+            } else {
+                subtitleEl.textContent = 'Ближайший день рождения';
+                countdownEl.textContent = formatDaysLeft(minDays);
+            }
+
+            if (nearest.length === 1) {
+                const p = nearest[0];
+                titleEl.textContent = `${p.name} (@${p.nick})`;
+                detailsEl.textContent = `Дата: ${formatBirthdayText(p.day, p.month)} • ${p.zodiac.label}`;
+            } else {
+                const names = nearest.map(p => `${p.name} (@${p.nick})`).join(', ');
+                titleEl.textContent = names;
+                detailsEl.textContent = `Дата: ${formatBirthdayText(nearest[0].day, nearest[0].month)} (${nearest.length} именинника)`;
+            }
+        }
+
+        function renderPeople() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const sortMode = document.getElementById('sortSelect').value;
+            const grid = document.getElementById('cardsGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            let filtered = people.filter(person => {
+                const zodiac = getZodiacSign(person.day, person.month);
+                const matchesMonth = selectedMonth === 0 || person.month === selectedMonth;
+                const matchesZodiac = selectedZodiac === 'all' || zodiac.id === selectedZodiac;
+                const matchesQuery = !query || 
+                    person.name.toLowerCase().includes(query) || 
+                    person.nick.toLowerCase().includes(query) ||
+                    zodiac.name.toLowerCase().includes(query);
+                return matchesMonth && matchesZodiac && matchesQuery;
+            });
+
+            filtered = filtered.map(p => ({
+                ...p,
+                daysLeft: getDaysUntilBirthday(p.day, p.month),
+                zodiac: getZodiacSign(p.day, p.month)
+            }));
+
+            if (sortMode === 'upcoming') {
+                filtered.sort((a, b) => a.daysLeft - b.daysLeft);
+            } else if (sortMode === 'calendar') {
+                filtered.sort((a, b) => {
+                    if (!a.month && !b.month) return 0;
+                    if (!a.month) return 1;
+                    if (!b.month) return -1;
+                    if (a.month !== b.month) return a.month - b.month;
+                    return a.day - b.day;
+                });
+            } else if (sortMode === 'zodiac') {
+                const orderMap = {};
+                ZODIAC_SIGNS.forEach((z, i) => { orderMap[z.id] = i; });
+                orderMap['unknown'] = 99;
+                filtered.sort((a, b) => {
+                    const diff = orderMap[a.zodiac.id] - orderMap[b.zodiac.id];
+                    if (diff !== 0) return diff;
+                    return a.name.localeCompare(b.name, 'ru');
+                });
+            } else if (sortMode === 'name') {
+                filtered.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+            } else {
+                filtered.sort((a, b) => a.id - b.id);
+            }
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            filtered.forEach(person => {
+                const isToday = person.daysLeft === 0;
+                const isSoon = person.daysLeft > 0 && person.daysLeft <= 7;
+                const hasDate = Boolean(person.day && person.month);
+                const gradClass = `grad-${person.id % 6}`;
+
+                let badgeHtml = '';
+                if (!hasDate) {
+                    badgeHtml = `<span class="countdown-badge badge-empty">Без даты</span>`;
+                } else if (isToday) {
+                    badgeHtml = `<span class="countdown-badge badge-today">Сегодня! 🎉</span>`;
+                } else if (isSoon) {
+                    badgeHtml = `<span class="countdown-badge badge-soon">${formatDaysLeft(person.daysLeft)}</span>`;
+                } else {
+                    badgeHtml = `<span class="countdown-badge badge-normal">${formatDaysLeft(person.daysLeft)}</span>`;
+                }
+
+                const card = document.createElement('article');
+                card.className = `pink-card person-card ${isToday ? 'today-glow' : ''}`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="card-header">
+                            <div class="card-identity">
+                                <div class="avatar-circle ${gradClass}">
+                                    ${escapeHtml(getInitials(person.name, person.nick))}
+                                </div>
+                                <div class="person-info">
+                                    <h3 class="person-name" title="${escapeHtml(person.name)}">
+                                        ${escapeHtml(person.name)}
+                                    </h3>
+                                    <p class="person-nick" title="@${escapeHtml(person.nick)}">
+                                        @${escapeHtml(person.nick)}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button type="button" onclick="openModal(${person.id})" title="Редактировать" class="icon-btn">
+                                    ✏️
+                                </button>
+                                <button type="button" onclick="askDeletePerson(${person.id})" title="Удалить" class="icon-btn">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-badges-row">
+                            <div class="date-chip">
+                                <span>🎂</span>
+                                <span>${escapeHtml(formatBirthdayText(person.day, person.month))}</span>
+                            </div>
+
+                            <button type="button" onclick="openZodiacModal(${person.id})" title="Посмотреть мини-гороскоп" class="zodiac-chip">
+                                <span>${escapeHtml(person.zodiac.label)}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <span class="card-index">#${person.id}</span>
+                        ${badgeHtml}
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function openZodiacModal(id) {
+            const person = people.find(p => p.id === id);
+            if (!person) return;
+
+            const zodiac = getZodiacSign(person.day, person.month);
+            document.getElementById('zodiacModalSymbol').textContent = zodiac.symbol;
+            document.getElementById('zodiacModalPerson').textContent = `${person.name} (@${person.nick})`;
+            document.getElementById('zodiacModalTitle').textContent = zodiac.name;
+            document.getElementById('zodiacModalDates').textContent = zodiac.dates;
+            document.getElementById('zodiacModalDesc').textContent = zodiac.desc;
+
+            const modal = document.getElementById('zodiacModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeZodiacModal() {
+            const modal = document.getElementById('zodiacModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openModal(id = null) {
+            const modal = document.getElementById('personModal');
+            const title = document.getElementById('modalTitle');
+            const editIdInput = document.getElementById('editId');
+            const nameInput = document.getElementById('inputName');
+            const nickInput = document.getElementById('inputNick');
+            const daySelect = document.getElementById('inputDay');
+            const monthSelect = document.getElementById('inputMonth');
+
+            if (id !== null) {
+                const person = people.find(p => p.id === id);
+                if (!person) return;
+                title.textContent = 'Редактировать участника';
+                editIdInput.value = person.id;
+                nameInput.value = person.name;
+                nickInput.value = person.nick;
+                daySelect.value = person.day || '';
+                monthSelect.value = person.month || '';
+            } else {
+                title.textContent = 'Добавить участника';
+                editIdInput.value = '';
+                nameInput.value = '';
+                nickInput.value = '';
+                daySelect.value = '';
+                monthSelect.value = '';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => nameInput.focus(), 50);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('personModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function savePerson(event) {
+            event.preventDefault();
+            const editId = document.getElementById('editId').value;
+            const name = document.getElementById('inputName').value.trim();
+            const nick = document.getElementById('inputNick').value.trim();
+            const dayVal = document.getElementById('inputDay').value;
+            const monthVal = document.getElementById('inputMonth').value;
+
+            if (!name || !nick) return;
+
+            const day = dayVal && monthVal ? parseInt(dayVal, 10) : null;
+            const month = dayVal && monthVal ? parseInt(monthVal, 10) : null;
+
+            if (editId) {
+                const numericId = parseInt(editId, 10);
+                const idx = people.findIndex(p => p.id === numericId);
+                if (idx !== -1) {
+                    people[idx] = { ...people[idx], name, nick, day, month };
+                }
+                showToast('Данные участника обновлены');
+            } else {
+                const maxId = people.reduce((max, p) => Math.max(max, p.id), 0);
+                people.push({
+                    id: maxId + 1,
+                    name,
+                    nick,
+                    day,
+                    month
+                });
+                showToast('Новый участник добавлен');
+            }
+
+            saveToStorage();
+            closeModal();
+            renderZodiacFilterOptions();
+            renderMonthPills();
+            updateUpcomingBanner();
+            renderPeople();
+        }
+
+        let confirmCallback = null;
+
+        function openConfirm(icon, title, text, onConfirm) {
+            document.getElementById('confirmIcon').textContent = icon;
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmText').textContent = text;
+            confirmCallback = onConfirm;
+
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfirm() {
+            const modal = document.getElementById('confirmModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            confirmCallback = null;
+        }
+
+        document.getElementById('confirmActionBtn').addEventListener('click', () => {
+            if (typeof confirmCallback === 'function') {
+                confirmCallback();
+            }
+            closeConfirm();
+        });
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2600);
+        }
+
+        function askDeletePerson(id) {
+            const person = people.find(p => p.id === id);
+            if (!person) return;
+
+            openConfirm(
+                "🗑️",
+                "Удалить участника?",
+                `Вы действительно хотите удалить ${person.name} (${person.nick}) из списка?`,
+                () => {
+                    people = people.filter(p => p.id !== id);
+                    saveToStorage();
+                    renderZodiacFilterOptions();
+                    renderMonthPills();
+                    updateUpcomingBanner();
+                    renderPeople();
+                    showToast("Запись удалена");
+                }
+            );
+        }
+
+        function askResetList() {
+            openConfirm(
+                "🔄",
+                "Вернуть исходный список?",
+                "Все ваши ручные изменения будут заменены исходным списком из 37 человек.",
+                () => {
+                    people = JSON.parse(JSON.stringify(INITIAL_PEOPLE));
+                    saveToStorage();
+                    selectedMonth = 0;
+                    selectedZodiac = 'all';
+                    document.getElementById('zodiacFilterSelect').value = 'all';
+                    clearSearch();
+                    renderZodiacFilterOptions();
+                    renderMonthPills();
+                    updateUpcomingBanner();
+                    renderPeople();
+                    showToast("Исходный список восстановлен");
+                }
+            );
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderPeople();
+        }
+
+        function resetFilters() {
+            selectedMonth = 0;
+            selectedZodiac = 'all';
+            document.getElementById('zodiacFilterSelect').value = 'all';
+            clearSearch();
+            renderMonthPills();
+            renderPeople();
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeConfirm();
+                closeZodiacModal();
+            }
+        });
+
+        document.getElementById('personModal').addEventListener('click', (e) => {
+            if (e.target.id === 'personModal') closeModal();
+        });
+
+        document.getElementById('confirmModal').addEventListener('click', (e) => {
+            if (e.target.id === 'confirmModal') closeConfirm();
+        });
+
+        document.getElementById('zodiacModal').addEventListener('click', (e) => {
+            if (e.target.id === 'zodiacModal') closeZodiacModal();
+        });
+
+        window.onload = function() {
+            loadPeople();
+            initControls();
+            updateUpcomingBanner();
+            renderPeople();
+        };
+    </script>
+</body>
+</html>
